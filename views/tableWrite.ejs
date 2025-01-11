@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <style>
+        /* Styles globaux */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f9fc;
+            color: #333;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin: 20px 20px 10px;
+            color: #007bff;
+        }
+
+        /* Styles pour les tableaux */
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            width: 90%;
+            max-width: 1200px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f7f9fc;
+        }
+
+        tr:hover {
+            background-color: #eaf4ff;
+        }
+
+        td {
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* Styles pour les formulaires */
+        .form-container {
+            margin: 20px auto;
+            width: 90%;
+            max-width: 800px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .form-container input[type="text"],
+        .form-container input[type="number"] {
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 200px;
+        }
+
+        .form-container button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+            background-color: #28a745;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .form-container button:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+
+        /* Styles pour les boutons */
+        .btn {
+            margin: 20px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            table {
+                width: 100%;
+            }
+
+            th, td {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+
+            .form-container {
+                flex-direction: column;
+            }
+
+            .form-container input[type="text"],
+            .form-container input[type="number"] {
+                width: 100%;
+            }
+
+            .form-container button {
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<h1><%= title %></h1>
+
+<!-- Formulaire d'ajout -->
+<div class="form-container">
+    <input type="text" id="studentName" placeholder="Student Name" required />
+    <input type="number" id="studentGrade" placeholder="Grade" required />
+    <button id="saveGradeBtn">Add Grade</button>
+</div>
+
+<!-- Tableau pour afficher les données -->
+<table id="gradesTable">
+    <thead>
+    <tr>
+        <th>Student Name</th>
+        <th>Grade</th>
+        <th>Validated</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<!-- Bouton de retour -->
+<button onclick="window.location.href='/'" class="btn">Back to Home</button>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const saveGradeBtn = document.getElementById("saveGradeBtn");
+        const studentNameInput = document.getElementById("studentName");
+        const studentGradeInput = document.getElementById("studentGrade");
+        const gradesTable = document.getElementById("gradesTable").querySelector("tbody");
+
+        const ue = "<%= ue %>";
+
+        // Chargement des données depuis localStorage
+        const students = JSON.parse(localStorage.getItem("students") || "[]");
+
+        // Filtrer et afficher les données
+        const filteredStudents = students.filter(student => student.ue === ue);
+        filteredStudents.forEach(({ name, grade, validated }) => addRow(name, grade, validated));
+
+        // Gestionnaire d'ajout
+        saveGradeBtn.addEventListener("click", () => {
+            const name = studentNameInput.value.trim();
+            const grade = studentGradeInput.value.trim();
+            const validated = false;
+
+            if (!name || !grade) {
+                alert("Please fill in both fields!");
+                return;
+            }
+
+            // Mise à jour du cache
+            const newStudent = { ue, name, grade, validated };
+            students.push(newStudent);
+            localStorage.setItem("students", JSON.stringify(students));
+
+            // Mise à jour du tableau
+            addRow(name, grade, validated);
+
+            // Réinitialiser les champs
+            studentNameInput.value = "";
+            studentGradeInput.value = "";
+        });
+
+        // Fonction pour ajouter une ligne au tableau
+        function addRow(name, grade, validated) {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${name}</td>
+                <td>${grade}</td>
+                <td>${validated ? 'Yes' : 'No'}</td>
+            `;
+            gradesTable.appendChild(row);
+        }
+    });
+</script>
+</body>
+</html>

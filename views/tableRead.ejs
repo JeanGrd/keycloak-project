@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <style>
+        /* Styles globaux */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f9fc;
+            color: #333;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin: 20px 0;
+            color: #007bff;
+        }
+
+        /* Styles pour les tableaux */
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            width: 90%;
+            max-width: 1200px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f7f9fc;
+        }
+
+        tr:hover {
+            background-color: #eaf4ff;
+        }
+
+        td {
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* Styles pour les boutons */
+        .btn {
+            margin: 20px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            table {
+                width: 100%;
+            }
+
+            th, td {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+
+            .btn {
+                font-size: 0.9rem;
+                padding: 8px 16px;
+            }
+        }
+    </style>
+    <script>
+        // Injection du contexte UE
+        const ue = "<%= ue %>";
+
+        // Chargement des données filtrées depuis le cache (localStorage)
+        document.addEventListener("DOMContentLoaded", () => {
+            const students = JSON.parse(localStorage.getItem("students") || "[]");
+            const filteredStudents = students.filter(student => student.ue === ue);
+
+            // Mise à jour du contenu du tableau
+            const tableBody = document.querySelector("tbody");
+            tableBody.innerHTML = filteredStudents.map(student => `
+                <tr>
+                    <td>${student.name}</td>
+                    <td>${student.grade}</td>
+                    <td>${student.validated ? 'Yes' : 'No'}</td>
+                </tr>
+            `).join("");
+        });
+    </script>
+</head>
+<body>
+<h1><%= title %></h1>
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Grade</th>
+        <th>Validated</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+<button onclick="window.location.href='/'" class="btn">Back to Home</button>
+</body>
+</html>

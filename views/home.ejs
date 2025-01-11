@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Accueil</title>
+    <style>
+        /* Styles globaux pour la page */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Styles pour les boutons */
+        .btn {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            text-decoration: none;
+            color: #fff;
+            background-color: #007bff; /* Bleu pour les actions */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Effet de survol pour les boutons normaux */
+        .btn:hover {
+            background-color: #0056b3; /* Bleu foncé au survol */
+        }
+
+        /* Style spécifique pour le bouton de déconnexion */
+        .btn-logout {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            text-decoration: none;
+            color: #fff;
+            background-color: #dc3545; /* Rouge pour indiquer une action importante */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Effet de survol pour le bouton de déconnexion */
+        .btn-logout:hover {
+            background-color: #c82333; /* Rouge foncé au survol */
+        }
+
+        /* Conteneur pour les actions spécifiques */
+        .action-container {
+            margin: 20px 0;
+        }
+
+        /* Conteneur pour le bouton de déconnexion */
+        .logout-container {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+<!-- Titre principal de la page -->
+<h1>Bienvenue sur la page d'accueil</h1>
+
+<!-- Vérification de la connexion de l'utilisateur -->
+<% if (user) { %>
+    <!-- Affichage des informations utilisateur -->
+    <p><strong>Bonjour, <%= user.name %>!</strong></p>
+    <p>Email : <%= user.email %></p>
+    <p>Nom d'utilisateur : <%= user.username %></p>
+
+    <!-- Liste des actions disponibles pour chaque UE -->
+    <div>
+        <h2>Actions pour UE</h2>
+        <% const ues = [1, 2, 3]; %> <!-- Liste des UE disponibles -->
+        <% ues.forEach(ue => { %>
+            <!-- Vérifie si l'utilisateur a au moins une permission pour l'UE -->
+            <% const hasPermission = user.permissions.includes(`L${ue}`) || user.permissions.includes(`E${ue}`) || user.permissions.includes(`V${ue}`); %>
+            <% if (hasPermission) { %>
+                <!-- Conteneur pour les actions de l'UE -->
+                <div class="action-container">
+                    <h3>UE<%= ue %></h3>
+                    <!-- Bouton pour lire les données de l'UE -->
+                    <% if (user.permissions.includes(`L${ue}`)) { %>
+                        <button class="btn" onclick="window.location.href='/asset11/lire/<%= ue %>'">Lire L<%= ue %></button>
+                    <% } %>
+                    <!-- Bouton pour écrire des données dans l'UE -->
+                    <% if (user.permissions.includes(`E${ue}`)) { %>
+                        <button class="btn" onclick="window.location.href='/asset11/ecrire/<%= ue %>'">Écrire L<%= ue %></button>
+                    <% } %>
+                    <!-- Bouton pour valider les données dans l'UE -->
+                    <% if (user.permissions.includes(`V${ue}`)) { %>
+                        <button class="btn" onclick="window.location.href='/asset11/valider/<%= ue %>'">Valider L<%= ue %></button>
+                    <% } %>
+                </div>
+            <% } %>
+        <% }); %>
+    </div>
+
+    <!-- Bouton de déconnexion -->
+    <div class="logout-container">
+        <button class="btn-logout" onclick="window.location.href='/logout'">Se déconnecter</button>
+    </div>
+
+<% } else { %>
+    <!-- Message affiché si l'utilisateur n'est pas connecté -->
+    <p>Veuillez vous connecter</p>
+<% } %>
+</body>
+</html>

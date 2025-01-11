@@ -1,0 +1,14 @@
+{
+  "realm": "TP-projet",
+  "auth-server-url": "http://localhost:8000/",
+  "ssl-required": "external",
+  "resource": "tp-projet",
+  "verify-token-audience": true,
+  "credentials": {
+    "secret": "CCkxazYsWlQNEEbbfhIYN9F3q8JQxcgp"
+  },
+  "confidential-port": 0,
+  "policy-enforcer": {
+    "credentials": {}
+  }
+}
