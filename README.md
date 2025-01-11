@@ -35,5 +35,4 @@ Avant de lancer le projet, assurez-vous d'avoir installé les outils suivants :
 - [Keycloak](https://www.keycloak.org/) (serveur de gestion des identités)
 
 ## Auteur 
-- **Nom** : Jean
-- **Email** : votre.email@example.com
+- **Nom** : Jean GUIRAUD
